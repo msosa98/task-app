@@ -5,8 +5,9 @@ import { TaskItem } from "./TaskItem";
 import { showAlert } from "../helpers/showAlert";
 
 export const TaskGrid = () => {
-  const { tasks } = useSelector((state) => state.tasks);
 
+  const { tasks } = useSelector((state) => state.tasks);
+  
   return (
     <>
       {!tasks || tasks.length === 0 ? (

@@ -8,5 +8,5 @@ export const types = {
   cleanTasks: "[TASK]: Clean Tasks",
   addTask:["[TASK]: Add Task"],
   deleteTask:["[TASK]: Delete Task"],
-  updateTask:["[TASK]: Update Task"]
+  doneTask:["[TASK]: Done Task"]
 };

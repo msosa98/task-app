@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { updateTaskById } from "../helpers/updateTaskById";
 import { deleteTaskById } from "../helpers/deleteTaskById";
-import { deleteTask, updateTask } from "../state-management/actions/taskAction";
+import { deleteTask, doneTask } from "../state-management/actions/taskAction";
 
 export const TaskItem = ({ id, description, status }) => {
 
@@ -14,7 +14,7 @@ export const TaskItem = ({ id, description, status }) => {
   const handleDone = () => {
     const task = { description, status: !state, author: user };
     updateTaskById(token, task, id)
-        .then(task => dispatch(updateTask(task._id)))
+        .then(task => dispatch(doneTask(task._id)))
         .then(setState(!state));
   }
 
