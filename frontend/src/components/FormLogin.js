@@ -6,9 +6,10 @@ import { loadTasks } from "../state-management/actions/taskAction";
 import { getTasks } from "../helpers/getTasks";
 import { showAlert } from "../helpers/showAlert";
 import { login } from "../helpers/login";
+import { Spinner } from "./Spinner";
 
 export const FormLogin = () => {
-
+  const [loading, setLoading] = useState();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState(false);
@@ -25,13 +26,17 @@ export const FormLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (username && password) {
       const data = await login(username, password);
-      if(data.userExist) {
+      if (data.userExist) {
         dispatch(signin(data));
-        const tasks = await getTasks(data.token, data.userExist);
+        const tasks = await getTasks(data.token, data.userExist).then(
+          setLoading(false)
+        );
         dispatch(loadTasks(tasks));
       } else {
+        setLoading(false);
         setError(data.message);
       }
     } else {
@@ -58,9 +63,10 @@ export const FormLogin = () => {
           onChange={handleChangePassword}
         />
       </div>
-      <div className="form-group form-check"/>
+      <div className="form-group form-check" />
       <button className="btn btn-primary btn-block">Sign In</button>
-      { error && showAlert("danger", error) }
+      <div className="spinner-container mt-4">{loading && <Spinner />}</div>
+      {error && showAlert("danger", error)}
     </form>
   );
 };

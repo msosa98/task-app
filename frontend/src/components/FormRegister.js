@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 import { showAlert } from "../helpers/showAlert";
 import { register } from "../helpers/register";
+import { Spinner } from "./Spinner";
 
 export const FormRegister = () => {
-
+  const [loading, setLoading] = useState();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [logged, setLogged] = useState(false);
@@ -20,10 +21,12 @@ export const FormRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if ((username && password) && (username.length >= 5 && password.length >= 5)) {
-      const data = await register(username, password);
+    setLoading(true);
+    if (username && password && username.length >= 5 && password.length >= 5) {
+      const data = await register(username, password).then(setLoading(false));
       data.username ? setLogged(true) : setError(data.message);
     } else {
+      setLoading(false);
       setError("Username and password must contain at least 5 characters");
     }
   };
@@ -47,10 +50,11 @@ export const FormRegister = () => {
           onChange={handleChangePassword}
         />
       </div>
-      <div className="form-group form-check"/>
+      <div className="form-group form-check" />
       <button className="btn btn-primary btn-block">Sign Up</button>
-      { (error && !logged) && showAlert("danger", error) }
-      { (logged) && showAlert("success", "Successfully registered user", true) }
+      <div className="spinner-container mt-4">{loading && <Spinner />}</div>
+      {error && !logged && showAlert("danger", error)}
+      {logged && showAlert("success", "Successfully registered user", true)}
     </form>
   );
 };
